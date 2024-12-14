@@ -1,3 +1,21 @@
 services:
-  mongo:
-    image:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongodb_data:/data/db
+  backend:
+    build: ./backend
+    environment:
+      MONGODB_URI: mongodb://root:example@localhost:27017/your_database?authSource=admin
+      PORT: 5000
+      JWT_SECRET: password
+      FRONTEND_URL: "http://localhost: 5000"
+
+volumes:
+  mongodb_data:
